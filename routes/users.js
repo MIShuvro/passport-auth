@@ -1,9 +1,20 @@
-var express = require('express');
-var router = express.Router();
+var Route = require('express').Router()
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
+const passport = require('passport')
 
-module.exports = router;
+
+const { register, login, users, me } = require('../controller/UserController')
+const { session } = require('passport')
+
+Route.post('/register', register)
+
+
+Route.post('/login', passport.authenticate('local-login', { session: false }), login)
+
+
+Route.get('/users', users)
+
+Route.get('/me', passport.authenticate("jwt", { session: false }) ,me)
+
+
+module.exports = Route;
